@@ -48,7 +48,7 @@ def symsqrt_v1(A, func='svd'):
 
 
 #### VIA SVD, version 2: from https://github.com/pytorch/pytorch/issues/25481
-def symsqrt_v2(A, func='symeig'):
+def symsqrt_v2(A, func='svd'):
     """Compute the square root of a symmetric positive definite matrix."""
     if func == 'symeig':
         s, v = A.symeig(eigenvectors=True) # This is faster in GPU than CPU, fails gradcheck. See https://github.com/pytorch/pytorch/issues/30578
