@@ -806,6 +806,8 @@ class DatasetDistance():
         if gpu is None:
             gpu = self.device != 'cpu'
         if 'method' in kwargs and kwargs['method'] == 'emd':
+            b = torch.from_numpy(b)
+            a = torch.from_numpy(a)
             π = ot.emd(a, b, C / C.max())
         elif not gpu:
             π = ot.sinkhorn(a, b, C / C.max(), entreg, **kwargs)
