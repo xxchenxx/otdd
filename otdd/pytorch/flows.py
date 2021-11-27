@@ -1010,9 +1010,7 @@ class ImageGridCallback(Callback):
                     ## Have enough matched, select from these with prob prop ot weight on correct class
                     p = otdd.π[idxs_class_matched,:][:,Y2-min(Y2)==c].sum(axis=1)
                     p /= p.sum()
-                    print(p)
-                    print(p.sum())
-                    idxs_class_selected = np.sort(np.random.choice(idxs_class_matched, self.nrow, replace=False, p=p))
+                    idxs_class_selected = np.sort(np.random.choice(idxs_class_matched, self.nrow, replace=False, p=p.numpy()))
                 else:
                     ## Not enough matched, complete with unmatched
                     idxs_class = torch.where(Y1 == c)[0]
