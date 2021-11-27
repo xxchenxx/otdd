@@ -19,7 +19,7 @@ except:
     import numpy as cp
 
 #### VIA SVD, version 1: from https://github.com/pytorch/pytorch/issues/25481
-def symsqrt_v1(A, func='symeig'):
+def symsqrt_v1(A, func='svd'):
     """Compute the square root of a symmetric positive definite matrix."""
     ## https://github.com/pytorch/pytorch/issues/25481#issuecomment-576493693
     ## perform the decomposition
