@@ -79,7 +79,7 @@ if args.rot:
         train_transforms.append(MyRotationTransform(int(args.rot)))
 
 if args.crop:
-    if args.rot == 'rand':
+    if args.crop == 'rand':
         train_transforms.append(torchvision.transforms.RandomResizedCrop(32))
     else:
         train_transforms.append(torchvision.transforms.CenterCrop(28))
