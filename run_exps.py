@@ -92,12 +92,15 @@ for data, label in loaders_src['test']:
 
 print(f"Test Error: {100-test_top1.avg}")
 
+for name, p in model.named_parameters():
+    if not 'f' in name:
+        p.requires_grad = False
 
 for epoch in range(10):
     model.train()
     top1 = AverageMeter()
     for data, label in loaders_tgt['train']:
-        data = data.cuda()
+        data = data.cuda()  
         label = label.cuda()
         output = model(data)
         loss = criterion(output, label)
