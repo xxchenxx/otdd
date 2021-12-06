@@ -88,7 +88,8 @@ class LeNet5(nn.Module):
         self.c3 = C3() 
         self.f4 = F4() 
         self.f5 = F5() 
-
+        self._initialize_weights()    
+    
     def forward(self, img):
         output = self.c1(img)
 
@@ -102,3 +103,16 @@ class LeNet5(nn.Module):
         output = self.f4(output)
         output = self.f5(output)
         return output
+    
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.Linear):
+                nn.init.normal_(m.weight, 0, 0.01)
+                nn.init.constant_(m.bias, 0)
