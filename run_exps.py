@@ -192,6 +192,10 @@ for data, label in loaders_tgt['test']:
 
 print(f"Test Error: {100-test_top1.avg}")
 
+
+loaders_src = load_torchvision_data('MNIST', transform=[torchvision.transforms.Compose(train_transforms), torchvision.transforms.Compose(test_transforms)], maxsize=2000)[0]
+loaders_tgt = load_torchvision_data('USPS',  resize = 32, maxsize=2000)[0]
+
 dist = DatasetDistance(loaders_src['train'], loaders_tgt['train'],
                        inner_ot_method = 'exact',
                        debiased_loss = True,
