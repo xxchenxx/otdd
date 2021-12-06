@@ -42,10 +42,6 @@ class AverageMeter(object):
 
 # Load datasets
 import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument('--rot', default=None, type=str)
-parser.add_argument('--crop', default=None, type=str)
-args = parser.parse_args()
 
 train_transforms = []
 test_transforms = []
