@@ -46,40 +46,13 @@ parser.add_argument('--crop', default=None, type=str)
 args = parser.parse_args()
 
 train_transforms = []
-test_transforms = [torchvision.transforms.Resize(32), 
-                    torchvision.transforms.ToTensor(),
-                    torchvision.transforms.Normalize((0.1307,), (0.3081,))]
-import torchvision.transforms.functional as TF
-class MyRotationTransform:
-    """Rotate by one of the given angles."""
+test_transforms = []
 
-    def __init__(self, angles):
-        self.angles = angles
+src_train_transforms = torchvision.transforms.Compose([
+    torchvision.transforms.
+])
 
-    def __call__(self, x):
-        return TF.rotate(x, self.angles)
-
-
-if args.rot:
-    if args.rot == 'rand':
-        train_transforms.append(torchvision.transforms.RandomRotation())
-    else:
-        train_transforms.append(MyRotationTransform(int(args.rot)))
-
-if args.crop:
-    if args.rot == 'rand':
-        train_transforms.append(torchvision.transforms.RandomResizedCrop(32))
-    else:
-        train_transforms.append(torchvision.transforms.CenterCrop(28))
-        train_transforms.append(torchvision.transforms.Resize(32))
-else:
-    train_transforms.append(torchvision.transforms.Resize(32))
-    train_transforms.append(torchvision.transforms.Resize(32))
-
-train_transforms.extend([torchvision.transforms.ToTensor(),
-                    torchvision.transforms.Normalize((0.1307,), (0.3081,))])
-
-loaders_src = load_torchvision_data('MNIST', transform=[torchvision.transforms.Compose(train_transforms), torchvision.transforms.Compose(test_transforms)])[0]
+loaders_src = load_torchvision_data('MNIST', resize = 32)[0]
 loaders_tgt = load_torchvision_data('USPS',  resize = 32)[0]
 
 model = LeNet5()
@@ -131,5 +104,3 @@ for data, label in loaders_tgt['test']:
     test_top1.update(prec1.item(), data.size(0))
 
 print(f"Test Error: {100-test_top1.avg}")
-
-

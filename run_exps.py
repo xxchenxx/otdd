@@ -39,7 +39,47 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
 
 # Load datasets
-loaders_src = load_torchvision_data('MNIST', resize = 32)[0]
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--rot', default=None, type=str)
+parser.add_argument('--crop', default=None, type=str)
+args = parser.parse_args()
+
+train_transforms = []
+test_transforms = [torchvision.transforms.Resize(32), 
+                    torchvision.transforms.ToTensor(),
+                    torchvision.transforms.Normalize((0.1307,), (0.3081,))]
+import torchvision.transforms.functional as TF
+class MyRotationTransform:
+    """Rotate by one of the given angles."""
+
+    def __init__(self, angles):
+        self.angles = angles
+
+    def __call__(self, x):
+        return TF.rotate(x, self.angles)
+
+
+if args.rot:
+    if args.rot == 'rand':
+        train_transforms.append(torchvision.transforms.RandomRotation())
+    else:
+        train_transforms.append(MyRotationTransform(int(args.rot)))
+
+if args.crop:
+    if args.rot == 'rand':
+        train_transforms.append(torchvision.transforms.RandomResizedCrop(32))
+    else:
+        train_transforms.append(torchvision.transforms.CenterCrop(28))
+        train_transforms.append(torchvision.transforms.Resize(32))
+else:
+    train_transforms.append(torchvision.transforms.Resize(32))
+    train_transforms.append(torchvision.transforms.Resize(32))
+
+train_transforms.extend([torchvision.transforms.ToTensor(),
+                    torchvision.transforms.Normalize((0.1307,), (0.3081,))])
+
+loaders_src = load_torchvision_data('MNIST', transform=[torchvision.transforms.Compose(train_transforms), torchvision.transforms.Compose(test_transforms)])[0]
 loaders_tgt = load_torchvision_data('USPS',  resize = 32)[0]
 
 model = LeNet5()
