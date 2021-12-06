@@ -48,9 +48,6 @@ args = parser.parse_args()
 train_transforms = []
 test_transforms = []
 
-src_train_transforms = torchvision.transforms.Compose([
-    torchvision.transforms.
-])
 
 loaders_src = load_torchvision_data('MNIST', resize = 32)[0]
 loaders_tgt = load_torchvision_data('USPS',  resize = 32)[0]

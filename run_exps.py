@@ -79,6 +79,8 @@ else:
 train_transforms.extend([torchvision.transforms.ToTensor(),
                     torchvision.transforms.Normalize((0.1307,), (0.3081,))])
 
+print(train_transforms)
+print(test_transforms)
 loaders_src = load_torchvision_data('MNIST', transform=[torchvision.transforms.Compose(train_transforms), torchvision.transforms.Compose(test_transforms)])[0]
 loaders_tgt = load_torchvision_data('USPS',  resize = 32)[0]
 
@@ -185,5 +187,5 @@ dist = DatasetDistance(loaders_src['train'], loaders_tgt['train'],
                        p = 2, entreg = 1e-1,
                        device='cuda')
 
-d = dist.distance()
+d = dist.distance(maxsamples = 1000)
 print(f'OTDD(src,tgt)={d}')
