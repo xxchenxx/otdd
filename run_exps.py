@@ -134,4 +134,4 @@ for data, label in loaders_tgt['test']:
     prec1 = accuracy(output.data, label)[0]
     test_top1.update(prec1.item(), data.size(0))
 
-
+print(f"Test Accuracy: {test_top1.avg}")
