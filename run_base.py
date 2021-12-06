@@ -50,9 +50,19 @@ test_transforms = []
 
 import argparse
 parser = argparse.ArgumentParser()
+parser.add_argument('--seed', type=int, default=1)
 parser.add_argument('--rot', default=None, type=str)
 parser.add_argument('--crop', default=None, type=str)
 args = parser.parse_args()
+
+def setup_seed(seed): 
+    torch.manual_seed(seed) 
+    torch.cuda.manual_seed_all(seed) 
+    np.random.seed(seed) 
+    random.seed(seed) 
+    torch.backends.cudnn.deterministic = True 
+
+setup_seed(args.seed)
 
 train_transforms = []
 test_transforms = [torchvision.transforms.Resize(32), 
