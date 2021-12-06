@@ -82,8 +82,11 @@ if args.crop:
     if args.crop == 'rand':
         train_transforms.append(torchvision.transforms.RandomResizedCrop(32))
     else:
+        
+        train_transforms.append(torchvision.transforms.Resize(32))
         train_transforms.append(torchvision.transforms.CenterCrop(28))
         train_transforms.append(torchvision.transforms.Resize(32))
+        
 else:
     train_transforms.append(torchvision.transforms.Resize(32))
 
