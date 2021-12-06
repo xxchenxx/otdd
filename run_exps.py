@@ -38,8 +38,8 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
 
 # Load datasets
-loaders_src = load_torchvision_data('MNIST', resize = 28, to3channels=True)[0]
-loaders_tgt = load_torchvision_data('USPS',  resize = 28, to3channels=True)[0]
+loaders_src = load_torchvision_data('MNIST', resize = 32)[0]
+loaders_tgt = load_torchvision_data('USPS',  resize = 32)[0]
 
 net = LeNet5()
 criterion = torch.nn.CrossEntropyLoss()
