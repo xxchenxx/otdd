@@ -1,5 +1,6 @@
 import torchvision
 import torch
+import copy
 from lenet import LeNet5
 
 from otdd.pytorch.distance import DatasetDistance
@@ -41,18 +42,20 @@ class AverageMeter(object):
 loaders_src = load_torchvision_data('MNIST', resize = 32)[0]
 loaders_tgt = load_torchvision_data('USPS',  resize = 32)[0]
 
-net = LeNet5()
+model = LeNet5()
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(net.parameters(), lr=1e-3, weight_decay=1e-6)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-6)
 
-net = net.cuda()
-top1 = AverageMeter()
-
+model = model.cuda()
+best_val = 0
+# pretrain
 for epoch in range(20):
+    model.train()
+    top1 = AverageMeter()
     for data, label in loaders_src['train']:
         data = data.cuda()
         label = label.cuda()
-        output = net(data)
+        output = model(data)
         loss = criterion(output, label)
         optimizer.zero_grad()
         loss.backward()
@@ -64,5 +67,28 @@ for epoch in range(20):
     print('Epoch: [{0}]'
                 'Accuracy {top1.val:.3f} ({top1.avg:.3f})\t'.format(
                     epoch, len(loaders_src['train']), top1=top1))
+    val_top1 = AverageMeter()
+    model.eval()
+    for data, label in loaders_src['valid']:
+        data = data.cuda()
+        label = label.cuda()
+        output = model(data)
+        prec1 = accuracy(output.data, label)[0]
+        val_top1.update(prec1.item(), data.size(0))
+    if val_top1.avg > best_val:
+        best_val = val_top1.avg
+        best_model_state_dict = copy.deepcopy(model.state_dict())
 
+# load back
+
+model.load_state_dict(best_model_state_dict)
+test_top1 = AverageMeter()
+for data, label in loaders_src['test']:
+    data = data.cuda()
+    label = label.cuda()
+    output = model(data)
+    prec1 = accuracy(output.data, label)[0]
+    test_top1.update(prec1.item(), data.size(0))
+
+print(f"Test Accuracy: {test_top1.avg}")
 
