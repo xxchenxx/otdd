@@ -36,13 +36,13 @@ class AverageMeter(object):
         self.sum += val * n
         self.count += n
         self.avg = self.sum / self.count
-        
+
 # Load datasets
 loaders_src = load_torchvision_data('MNIST', resize = 28)[0]
 loaders_tgt = load_torchvision_data('USPS',  resize = 28)[0]
 
 net = LeNet5()
-criterion = torch.nn.CrossEntropy()
+criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(net.parameters(), lr=1e-3, weight_decay=1e-6)
 
 net = net.cuda()
