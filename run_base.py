@@ -1,6 +1,8 @@
 import torchvision
 import torch
 import copy
+import random
+import numpy as np
 from lenet import LeNet5
 
 from otdd.pytorch.distance import DatasetDistance
