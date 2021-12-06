@@ -133,11 +133,3 @@ for data, label in loaders_tgt['test']:
 print(f"Test Error: {100-test_top1.avg}")
 
 
-dist = DatasetDistance(loaders_src['train'], loaders_tgt['train'],
-                       inner_ot_method = 'exact',
-                       debiased_loss = True,
-                       p = 2, entreg = 1e-1,
-                       device='cuda')
-
-d = dist.distance()
-print(f'OTDD(src,tgt)={d}')
