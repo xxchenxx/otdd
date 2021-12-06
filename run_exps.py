@@ -74,7 +74,7 @@ class MyRotationTransform:
 
 if args.rot:
     if args.rot == 'rand':
-        train_transforms.append(torchvision.transforms.RandomRotation())
+        train_transforms.append(torchvision.transforms.RandomRotation((-180,180)))
     else:
         train_transforms.append(MyRotationTransform(int(args.rot)))
 
