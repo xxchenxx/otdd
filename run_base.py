@@ -52,50 +52,6 @@ best_val = 0
 for epoch in range(20):
     model.train()
     top1 = AverageMeter()
-    for data, label in loaders_src['train']:
-        data = data.cuda()
-        label = label.cuda()
-        output = model(data)
-        loss = criterion(output, label)
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-        prec1 = accuracy(output.data, label)[0]
-        top1.update(prec1.item(), data.size(0))
-
-    print('Epoch: [{0}]'
-                'Accuracy {top1.val:.3f} ({top1.avg:.3f})\t'.format(
-                    epoch, len(loaders_src['train']), top1=top1))
-    val_top1 = AverageMeter()
-    model.eval()
-    for data, label in loaders_src['valid']:
-        data = data.cuda()
-        label = label.cuda()
-        output = model(data)
-        prec1 = accuracy(output.data, label)[0]
-        val_top1.update(prec1.item(), data.size(0))
-    if val_top1.avg > best_val:
-        best_val = val_top1.avg
-        best_model_state_dict = copy.deepcopy(model.state_dict())
-
-# load back
-
-model.load_state_dict(best_model_state_dict)
-test_top1 = AverageMeter()
-for data, label in loaders_src['test']:
-    data = data.cuda()
-    label = label.cuda()
-    output = model(data)
-    prec1 = accuracy(output.data, label)[0]
-    test_top1.update(prec1.item(), data.size(0))
-
-print(f"Test Accuracy: {test_top1.avg}")
-
-
-for epoch in range(10):
-    model.train()
-    top1 = AverageMeter()
     for data, label in loaders_tgt['train']:
         data = data.cuda()
         label = label.cuda()
@@ -110,7 +66,7 @@ for epoch in range(10):
 
     print('Epoch: [{0}]'
                 'Accuracy {top1.val:.3f} ({top1.avg:.3f})\t'.format(
-                    epoch, len(loaders_tgt['train']), top1=top1))
+                    epoch, len(loaders_src['train']), top1=top1))
     val_top1 = AverageMeter()
     model.eval()
     for data, label in loaders_tgt['valid']:
@@ -134,4 +90,4 @@ for data, label in loaders_tgt['test']:
     prec1 = accuracy(output.data, label)[0]
     test_top1.update(prec1.item(), data.size(0))
 
-print(f"Test Error: 1 - {test_top1.avg}")
+print(f"Test Error: 1-{test_top1.avg}")
