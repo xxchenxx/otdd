@@ -74,7 +74,6 @@ if args.crop:
         train_transforms.append(torchvision.transforms.Resize(32))
 else:
     train_transforms.append(torchvision.transforms.Resize(32))
-    train_transforms.append(torchvision.transforms.Resize(32))
 
 train_transforms.extend([torchvision.transforms.ToTensor(),
                     torchvision.transforms.Normalize((0.1307,), (0.3081,))])
